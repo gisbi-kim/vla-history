@@ -41,6 +41,11 @@ article{min-width:0;font-size:16px}article>p:first-child{font-size:18px;color:va
 .slide-actions a:hover{border-color:var(--accent);background:var(--soft)}
 .slide-frame{width:100%;height:520px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);display:block}
 @media(max-width:760px){.slide-frame{height:360px}}
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0 30px}
+.demo-card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px}
+.demo-card video,.demo-card iframe{width:100%;aspect-ratio:16/9;border-radius:6px;background:#000;display:block;border:0;object-fit:cover}
+.demo-cap{margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.demo-cap strong{color:var(--ink);display:block;margin-bottom:2px}
 .paper-fig svg{width:100%;height:auto;display:block}
 .paper-fig img{width:100%;height:auto;display:block;border-radius:6px;margin-bottom:14px;border:1px solid var(--rule)}
 .paper-fig figcaption{margin-top:12px;font-size:12px;line-height:1.65;color:var(--muted)}
@@ -967,6 +972,16 @@ z
 </tbody></table></div>
 <p>이 구조 덕분에 닫힌 냉장고에 컵을 넣으려다 문 여는 단계를 빼먹는 식의 논리 오류는 그래프 검증 단계에서 걸러진다.<button type="button" class="note-ref" aria-expanded="false" data-title="SayCan과의 차이" data-note="이름이 비슷한 SayCan(2022)은 그래프 검색 대신, 후보 스킬이 지시에 얼마나 유용한지(언어 점수)와 지금 상태에서 성공할 확률(affordance 점수)을 곱해 다음 스킬을 고른다. [S02]">주3</button></p>
 <p>하지만 곧 한계가 드러났다. 그래프 위에서 완벽하게 통과한 계획이라도 막상 로봇 손이 다가가면 카메라가 가려 있거나 컵이 미끄러진다. 상징 계획과 물리 접촉 사이의 간극을 메우려면, 아예 눈으로 보고 직접 숫자를 뱉는 <a href="#g-policy" class="term-ref" data-term="정책 (Policy)" data-def="현재 관측과 목표를 입력받아 다음에 취할 행동(또는 행동 확률 분포)을 출력하는 제어 모델 또는 함수 π(a|s).">정책</a>이 필요했다.</p>
+<div class="demo-grid">
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://say-can.github.io/img/palm_saycan_teaser_compressed.mp4"></video>
+<div class="demo-cap"><strong>SayCan 공식 시연 (2022)</strong>“음료를 쏟았는데 도와줄래?” 같은 모호한 지시에 스펀지·음료 캔을 골라 가져오는 어포던스 기반 스킬 선택 (<a href="https://www.youtube.com/watch?v=ysFav0b472w">YouTube 전체 영상</a>).</div>
+</div>
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://sayplan.github.io/Images/sayplan_compressed.mp4"></video>
+<div class="demo-cap"><strong>SayPlan 공식 시연 (2023)</strong>3D 장면 그래프(건물–층–방–물체)를 접고 펼치며 다층 사무실 환경을 탐색·재계획하는 장면 (<a href="https://www.youtube.com/watch?v=3aMgpqnD2RY">YouTube 전체 영상</a>).</div>
+</div>
+</div>
 
 <h2 id="s03">3. RT-1: 스킬을 부수고 숫자를 배우다</h2>
 <p>사실 시간표를 거슬러 올라가면, SayPlan보다 한 해 먼저 정반대의 길로 뛰어든 실험이 있었다. 2022년 구글 로보틱스 팀이 내놓은 RT-1이다.<button type="button" class="note-ref" aria-expanded="false" data-title="서술 순서 안내" data-note="발표 연도는 RT-1(2022)이 SayPlan(2023)보다 빠르다. 이 글은 의사결정 층위가 높은 계획에서 직접 수치 행동을 뱉는 정책으로 내려오는 흐름에 맞춰 배치했다.">주4</button></p>
@@ -1375,6 +1390,12 @@ z
 </div>
 <p>예측한 번호를 다시 실수로 되돌려 <a href="#g-control-step" class="term-ref" data-term="제어기 · 제어 스텝 (Control Step)" data-def="로봇 저수준 제어기가 1주기(예: 50Hz면 20ms)마다 목표 자세나 모터 토크 명령을 하나씩 소비해 실행하는 최소 물리 시간 단위.">제어기</a>에 넘기면 로봇이 <a href="#g-control-step" class="term-ref" data-term="제어기 · 제어 스텝 (Control Step)" data-def="로봇 저수준 제어기가 1주기(예: 50Hz면 20ms)마다 목표 자세나 모터 토크 명령을 하나씩 소비해 실행하는 최소 물리 시간 단위.">한 스텝</a> 움직인다. 그러면 카메라가 새 장면을 찍고, 모델은 그 장면을 받아 <a href="#g-control-step" class="term-ref" data-term="제어기 · 제어 스텝 (Control Step)" data-def="로봇 저수준 제어기가 1주기(예: 50Hz면 20ms)마다 목표 자세나 모터 토크 명령을 하나씩 소비해 실행하는 최소 물리 시간 단위.">다음 스텝</a>의 번호를 뽑는다.<button type="button" class="note-ref" aria-expanded="false" data-title="256의 의미와 700+ 지시" data-note="256은 ‘컵 집기’ 같은 완성 스킬의 가짓수가 아니라 연속 축의 양자화 눈금 수다. 700개 이상 지시 역시 물체·동사 조합의 수이지 독립적인 700종 운동 기술을 뜻하진 않는다.">주5</button></p>
 <p>RT-1은 언어 지시 하나로 수많은 조작을 3Hz <a href="#g-closed-loop" class="term-ref" data-term="Closed-loop 제어" data-def="한 번 명령을 내리고 끝내는 게 아니라, 매 순간 센서로 결과를 다시 관측해 다음 행동을 수정하는 피드백 제어 방식.">폐루프</a>로 풀어냈다는 점에서 기념비적이었다. 하지만 뼈아픈 약점이 있었다. 세상의 상식을 몰랐다. 컵 옮기기를 아무리 연습시켜도 <a href="#g-demonstration" class="term-ref" data-term="시연 데이터 (Demonstration)" data-def="사람이 원격조작(teleoperation) 등으로 로봇을 직접 움직여 모은 ‘관측 → 행동’ 모범 궤적 데이터.">시연</a> 데이터 바깥의 말—“졸린 사람에게 마실 걸 가져다줘”—을 걸면 그대로 굳어버렸다.</p>
+<div class="demo-grid">
+<div class="demo-card">
+<iframe loading="lazy" src="https://www.youtube.com/embed/UuKAp9a6wMs" title="RT-1: Robotics Transformer 공식 시연" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="demo-cap"><strong>RT-1 공식 시연 영상 (2022)</strong>13만 에피소드를 학습한 35M 단일 트랜스포머가 주방 환경에서 700+ 지시를 3Hz 폐루프로 수행하는 모습.</div>
+</div>
+</div>
 
 <h2 id="s04">4. RT-2: 인터넷의 기억을 로봇 손끝으로</h2>
 <p>해법은 의외로 가까운 곳에 있었다. 이미 웹상의 엄청난 이미지와 글을 읽고 세상의 이치를 깨우친 거대 <a href="#g-vlm" class="term-ref" data-term="Vision-Language Model" data-def="이미지와 텍스트를 동시에 이해하고 자연어 토큰을 생성하는 거대 멀티모달 모델.">VLM</a>을 그대로 데려와, 그 말칸 속에 로봇의 행동 숫자만 끼워 넣는 것이다.</p>
@@ -1418,6 +1439,12 @@ z
 </figure>
 <p>결과는 극적이었다. 로봇 <a href="#g-demonstration" class="term-ref" data-term="시연 데이터 (Demonstration)" data-def="사람이 원격조작(teleoperation) 등으로 로봇을 직접 움직여 모은 ‘관측 → 행동’ 모범 궤적 데이터.">시연</a> 데이터엔 한 번도 등장하지 않은 “멸종한 동물 장난감을 집어줘”라는 명령을 듣자, RT-2는 웹에서 배운 공룡과 멸종의 관계를 떠올려 정확히 공룡 인형으로 손을 뻗었다. <a href="#src-06">S06</a></p>
 <p>이 지점에서 로봇 학습의 역사는 <a href="#g-generalization" class="term-ref" data-term="일반화 (Generalization)" data-def="학습 데이터에 똑같이 나오지 않았던 새 물체, 새 배경, 새 지시문, 새 배치에서도 정책이 망가지지 않고 작동하는 능력.">일반화</a>를 둘로 갈라 보기 시작했다. 새 단어나 문맥을 보고 <strong>‘무엇을 집을지’</strong> 골라내는 건 <strong><a href="#g-semantic-generalization" class="term-ref" data-term="Semantic Generalization" data-def="학습 때 못 본 새 물체나 표현을 웹 상식과 연결해 ‘무엇을 해야 할지’ 알아맞히는 능력.">의미 일반화</a></strong>고, 낯선 물리 조건에서 <strong>‘새로운 손놀림’</strong>을 해내는 건 <strong><a href="#g-motion-generalization" class="term-ref" data-term="Motion Generalization" data-def="학습 시연에 없던 낯선 접촉 조건, 속도, 역학 환경에서도 ‘새로운 손놀림’을 해내는 능력.">운동 일반화</a></strong>다. 웹 지식은 <a href="#g-semantic-generalization" class="term-ref" data-term="Semantic Generalization" data-def="학습 때 못 본 새 물체나 표현을 웹 상식과 연결해 ‘무엇을 해야 할지’ 알아맞히는 능력.">의미 일반화</a>의 문을 활짝 열어젖혔지만, <a href="#g-demonstration" class="term-ref" data-term="시연 데이터 (Demonstration)" data-def="사람이 원격조작(teleoperation) 등으로 로봇을 직접 움직여 모은 ‘관측 → 행동’ 모범 궤적 데이터.">시연</a>에 없던 고속 공중 캐치 같은 새로운 손기술까지 공짜로 쥐여주진 못했다.<button type="button" class="note-ref" aria-expanded="false" data-title="RT-2 CoT 변형" data-note="RT-2 프로젝트에는 자연어로 먼저 추론을 읊은 뒤 행동을 뱉는 CoT 변형 실험도 있지만, 모든 RT-2가 매 제어 틱마다 긴 추론문을 생성하는 구조로 일반화할 순 없다. [S06]">주6</button></p>
+<div class="demo-grid">
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://robotics-transformer2.github.io/videos/rt2_teaser.mp4"></video>
+<div class="demo-cap"><strong>RT-2 공식 티저 시연 (2023)</strong>시연 데이터에 없던 “멸종한 동물”·“쓰레기 분리” 같은 웹 상식 추론을 행동 토큰으로 연결해 집어 올리는 장면.</div>
+</div>
+</div>
 
 <h2 id="s05">5. OXE, Octo, OpenVLA: 데이터와 코드의 개방</h2>
 <p>RT-2가 보여준 비전은 매혹적이었지만, 거대 기업의 닫힌 담장 안에 있었다. 더 큰 걸림돌은 데이터였다. 컴퓨터 비전에 ImageNet이 있었다면, 로보틱스엔 기관마다 제각각인 로봇 팔, 카메라, <a href="#g-coordinate-frame" class="term-ref" data-term="좌표계 (Coordinate Frame)" data-def="로봇의 위치·회전·행동 수치를 어느 기준점(로봇 베이스, 카메라, 손끝 EEF, 상대 변화량 등)에서 잴지 정하는 기준 틀.">좌표계</a>만 흩어져 있었다.</p>
@@ -1462,6 +1489,16 @@ z
 </ul>
 <p>연구자들은 비로소 자기 로봇에서 실패가 났을 때 데이터 문제인지, <a href="#g-coord-normalization" class="term-ref" data-term="좌표 정규화 (Normalization)" data-def="서로 다른 로봇·작업의 행동 범위(예: 관절 각도, 이동 거리)를 -1~1 또는 평균 0·분산 1 등 일정 스케일로 맞추는 전처리.">좌표 정규화</a> 문제인지, <a href="#g-fine-tuning" class="term-ref" data-term="미세조정" data-def="사전학습된 모델의 가중치를 특정 도메인이나 새 로봇 데이터에 맞게 추가로 업데이트하는 과정.">미세조정</a> 문제인지 직접 칼을 대고 해부할 수 있게 됐다. 하지만 초기 원판 OpenVLA에는 치명적인 맹점도 숨어 있었다. <a href="#g-rgb" class="term-ref" data-term="RGB 영상" data-def="빨강·초록·파랑 3채널 색상 정보를 담은 일반 카메라 이미지 입력(깊이·촉각 센서와 대비될 때 주로 쓰임).">RGB</a> 이미지 한 장과 지시문만 보고 7차원 행동을 한 번에 하나씩만 내뱉었던 것이다. 과거 <a href="#g-observation" class="term-ref" data-term="관측 (Observation)" data-def="정책이 매 제어 스텝마다 외부 카메라(RGB 등)와 내부 센서(고유수용감각)로부터 받아들이는 현재 입력 정보.">관측</a> 이력도, 현재 <a href="#g-joint-space" class="term-ref" data-term="관절 공간 (Joint Space)" data-def="손끝의 3D 좌표가 아니라, 로봇 팔 각 관절(모터)의 회전 각도·속도 벡터로 움직임을 표현하는 좌표계.">관절</a> <a href="#g-state" class="term-ref" data-term="상태 (State)" data-def="현재 시점의 로봇 내부 관절·그리퍼 수치(고유수용감각)와 환경의 물리적 배치를 포함하는 시스템의 현재 조건.">상태</a>(<a href="#g-proprioception" class="term-ref" data-term="고유수용감각 (내부 상태)" data-def="카메라 같은 외부 시야가 아니라, 로봇 스스로 느끼는 현재 관절 각도·속도·그리퍼 개폐 상태 등 내부 몸 상태 정보.">proprioception</a>)도 보지 못했다.<button type="button" class="note-ref" aria-expanded="false" data-title="원판 vs 후속 계열" data-note="다중 카메라·양팔·빠른 chunk 실행을 지원하는 OpenVLA-OFT 등 후속 연구의 기능을 원판 스펙과 섞어 읽으면 원판의 한계와 후속 기여가 흐려진다. [S07]">주7</button></p>
 <p>정지 사진 한 장만 쥐여주면 손이 컵으로 다가가다 멈춘 건지, 방금 놓치고 물러나는 중인지조차 알기 어렵다. 게다가 7B 모델이 답을 계산하는 동안 현실의 시간은 흐른다. 바로 이 1-스텝 예측의 한계를 정면으로 깨부순 두 편의 2023년 논문이 이제 역사의 전면에 올라선다.</p>
+<div class="demo-grid">
+<div class="demo-card">
+<iframe loading="lazy" src="https://www.youtube.com/embed/99667VDGWMg" title="Octo: Open-Source Generalist Robot Policy 시연" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="demo-cap"><strong>Octo 공식 시연 (2024.05)</strong>OXE 80만 궤적을 학습한 오픈소스 확산 정책이 다양한 로봇 팔·카메라 구성에 빠르게 미세조정되어 동작하는 모습.</div>
+</div>
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://openvla.github.io/static/videos/openvla_teaser_video.mp4"></video>
+<div class="demo-cap"><strong>OpenVLA 공식 시연 (2024.06)</strong>7B 오픈 웨이트 VLA가 여러 테이블·물체·조명 변화 속에서도 제로샷·미세조정 조작을 수행하는 모습 (<a href="https://www.youtube.com/watch?v=SIcPxapIgBI">YouTube 전체 영상</a>).</div>
+</div>
+</div>
 
 <hr>
 <div class="part-label">제2부 · 시간과 분포의 발견: <a href="#g-control-step" class="term-ref" data-term="제어기 · 제어 스텝 (Control Step)" data-def="로봇 저수준 제어기가 1주기(예: 50Hz면 20ms)마다 목표 자세나 모터 토크 명령을 하나씩 소비해 실행하는 최소 물리 시간 단위.">한 스텝</a>의 한계를 넘어서</div>
@@ -1503,6 +1540,16 @@ z
 <figcaption><strong>그림 5 · ACT와 Diffusion Policy 원논문 그림 및 핵심 대비</strong> [S09][S24]. 같은 2023년, ACT는 시간축 chunking을, Diffusion Policy는 다중 모달 연속 분포 생성을 각각 정립했다.</figcaption>
 </figure>
 <p><strong>ACT의 시간축 chunking</strong>과 <strong>Diffusion Policy의 <a href="#g-multimodal-distribution" class="term-ref" data-term="Multimodal Distribution" data-def="한 상황에서 유효한 정답이 여러 갈래(예: 왼쪽 회피 vs 오른쪽 회피)로 갈라져 봉우리가 여러 개인 확률 분포.">다중 모달 분포</a> 생성</strong>이 합쳐지면서, 이후 거의 모든 현대 <a href="#g-vla" class="term-ref" data-term="Vision-Language-Action" data-def="카메라 영상(Vision)과 자연어 지시(Language)를 함께 받아 로봇의 물리적 행동(Action)을 직접 출력하는 멀티모달 정책 모델.">VLA</a>의 행동 생성기(action head)가 이 두 기둥 위에 세워졌다.</p>
+<div class="demo-grid">
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://tonyzhaozh.github.io/aloha/resources/slot_battery.mp4"></video>
+<div class="demo-cap"><strong>ACT · ALOHA 정밀 양팔 시연 (2023.04)</strong>건전지 끼우기처럼 서브밀리미터 오차가 치명적인 접촉 작업을 50Hz action chunking + 시간적 앙상블로 해결.</div>
+</div>
+<div class="demo-card">
+<video controls muted loop playsinline preload="metadata" src="https://diffusion-policy.cs.columbia.edu/videos/highlight_pusht.mp4"></video>
+<div class="demo-cap"><strong>Diffusion Policy 공식 시연 (2023.03)</strong>T-블록 밀기(Push-T)에서 왼쪽·오른쪽 두 갈래 해법이 공존할 때 평균으로 뭉개지 않고 한 경로를 끝까지 밀어붙이는 모습 (<a href="https://www.youtube.com/watch?v=WLH3Cr_HL-c">YouTube 전체 영상</a>).</div>
+</div>
+</div>
 
 <h2 id="s07">7. 세 개의 시계: 물리·정책·생성</h2>
 <p>Chunk를 쓰기 시작하면 “로봇이 50Hz로 움직인다”는 말 한마디로는 아무것도 알 수 없게 된다. 시스템 안에서 세 개의 시계가 각자 다른 속도로 돌아가기 때문이다.</p>
