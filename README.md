@@ -10,6 +10,8 @@ Open `index.html` in a web browser. No build or installation is required.
 
 ## Hosting
 
+Live site: https://gisbi-kim.github.io/vla-history/
+
 GitHub Pages: deploy the `main` branch from `/ (root)`.
 
 Images are loaded from the original research project and paper websites.
