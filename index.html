@@ -33,6 +33,14 @@ article{min-width:0;font-size:16px}article>p:first-child{font-size:18px;color:va
 .part-label{margin:64px 0 -46px;font-size:11px;font-weight:750;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
 .toc-part{margin:14px 0 4px 13px;font-size:9px;font-weight:750;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
 .paper-fig{margin:30px 0 34px;padding:18px 20px;background:var(--paper);border:1px solid var(--rule);border-radius:10px}
+.slide-zone{margin:28px 0 34px;padding:18px 20px;background:var(--paper);border:1px solid var(--rule);border-radius:12px}
+.slide-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.slide-head strong{font-size:15px;color:var(--ink)}
+.slide-actions{display:flex;gap:8px;flex-wrap:wrap}
+.slide-actions a{font-size:12px;font-weight:600;text-decoration:none;padding:5px 12px;border:1px solid var(--rule);border-radius:999px;background:var(--bg);color:var(--accent);transition:border-color .15s,background .15s}
+.slide-actions a:hover{border-color:var(--accent);background:var(--soft)}
+.slide-frame{width:100%;height:520px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);display:block}
+@media(max-width:760px){.slide-frame{height:360px}}
 .paper-fig svg{width:100%;height:auto;display:block}
 .paper-fig img{width:100%;height:auto;display:block;border-radius:6px;margin-bottom:14px;border:1px solid var(--rule)}
 .paper-fig figcaption{margin-top:12px;font-size:12px;line-height:1.65;color:var(--muted)}
@@ -48,6 +56,7 @@ article{min-width:0;font-size:16px}article>p:first-child{font-size:18px;color:va
 <section class="hero"><div class="eyebrow">RESEARCH ESSAY · NOVEMBER 2026</div><h1>언어에서 행동으로<span>로봇 지능과 VLA의 역사</span></h1><p class="deck">SayPlan과 RT-1에서 시작해 Diffusion Policy, Open X-Embodiment, ACT, Helix·GR00T N1, π 시리즈(π0·π0.5·π*0.6·π0.7), 그리고 Astra까지. 로봇이 말귀를 알아듣고 몸을 움직이기까지 지난 몇 년의 설계 혁명을 입출력과 시간축의 언어로 엮었다.</p><div class="meta"><span>5부 20장 · 시간축 × 트랙 입체 분석</span><span>원논문 피겨 + 도식 14편</span><span>33개 1차 자료</span><span>2026.11.18 기준</span></div><div class="route"><a href="#survey-map"><small>01 · TIMELINE MAP</small><b>진화 계보도 보기 ↗</b></a><a href="#lab-heading"><small>02 · EXPLORE</small><b>행동의 세 시계 ↗</b></a><a href="#glossary"><small>03 · GLOSSARY</small><b>핵심 용어 사전 ↗</b></a></div></section>
 <div class="layout"><aside class="sidebar" id="sidebar"><div class="toc-inner"><p class="toc-label">CONTENTS</p>
 <div class="toc-part">제0부 · 지도 읽기</div>
+<a href="#slides">슬라이드 요약 (PDF)</a>
 <a href="#s00">0. 네 개의 트랙으로 보는 지도</a>
 <div class="toc-part">제1부 · 기호에서 픽셀로</div>
 <a href="#s01">1. 말과 모터 사이의 거대한 간극</a>
@@ -83,6 +92,16 @@ article{min-width:0;font-size:16px}article>p:first-child{font-size:18px;color:va
 <p><strong>기술 에세이 · 아키텍처와 시간축으로 읽는 로봇 학습 · 2026년 11월</strong></p>
 <p>불과 몇 년 전만 해도 로봇에게 말로 일을 시키는 건 공상과학에 가까웠다. 오늘날엔 데모 영상만 보면 로봇이 사람 말을 척척 알아듣고 컵을 치운다. 하지만 막을 걷고 안을 들여다보면, 두 대의 로봇이 똑같이 컵을 옮기더라도 머릿속에서 돌아가는 원리는 하늘과 땅 차이다. 어떤 모델은 작업 순서만 읊어주고 빠지고, 어떤 모델은 손끝이 가야 할 3차원 좌표를 직접 계산해 뱉는다. 모델이 직접 푼 숙제와 아래단 <a href="#g-control-step" class="term-ref" data-term="제어기 · 제어 스텝 (Control Step)" data-def="로봇 저수준 제어기가 1주기(예: 50Hz면 20ms)마다 목표 자세나 모터 토크 명령을 하나씩 소비해 실행하는 최소 물리 시간 단위.">제어기</a>에 떠넘긴 숙제가 완전히 다른 셈이다.</p>
 <p>이 글은 최근 몇 년 사이 로봇 학습의 판을 바꾼 연구들을 하나의 연대기로 엮는다. 기준은 단 하나, <strong>“로봇을 움직이는 숫자를 누가, 무엇을 보고, 얼마나 자주 정하는가”</strong>다. 기호 계획에서 직접 행동을 배우는 <a href="#g-policy" class="term-ref" data-term="정책 (Policy)" data-def="현재 관측과 목표를 입력받아 다음에 취할 행동(또는 행동 확률 분포)을 출력하는 제어 모델 또는 함수 π(a|s).">정책</a>으로, 다시 시간과 <a href="#g-multimodal-distribution" class="term-ref" data-term="Multimodal Distribution" data-def="한 상황에서 유효한 정답이 여러 갈래(예: 왼쪽 회피 vs 오른쪽 회피)로 갈라져 봉우리가 여러 개인 확률 분포.">다중 모달 분포</a>, 이중 속도 구조, 주파수 압축, <a href="#g-rl" class="term-ref" data-term="강화학습 (RL)" data-def="정답 시연을 그대로 외우는 대신, 환경과 상호작용하며 얻은 보상(성공/실패 신호)을 최대화하도록 정책을 개선하는 학습 패러다임.">강화학습</a>, 그리고 범용 <a href="#g-vlm" class="term-ref" data-term="Vision-Language Model" data-def="이미지와 텍스트를 동시에 이해하고 자연어 토큰을 생성하는 거대 멀티모달 모델.">VLM</a>이 직접 행동 좌표를 뱉기까지의 역사를 따라간다.<button type="button" class="note-ref" aria-expanded="false" data-title="읽기 안내" data-note="로봇 학습과 딥러닝에 익숙한 독자를 염두에 두고 썼다. 본문에 나오는 장난감 예제와 설계안은 이해를 돕기 위해 새로 짠 것이며, 논문의 실제 수치·구조에는 [S01]–[S30] 출처를 달았다. 흐름을 끊는 세부 단서와 예외 조건은 본문 밖 주석 팝업으로 뺐다.">주1</button></p>
+<section class="slide-zone" id="slides" aria-label="발표 슬라이드 임베드">
+<div class="slide-head">
+<strong>한눈에 보는 슬라이드 요약 · 언어에서 행동으로: VLA의 진화</strong>
+<div class="slide-actions">
+<a href="./언어에서_행동으로_VLA의_진화.pdf" target="_blank" rel="noopener noreferrer">새 탭에서 열기 ↗</a>
+<a href="./언어에서_행동으로_VLA의_진화.pdf" download="언어에서_행동으로_VLA의_진화.pdf">PDF 다운로드 ↓</a>
+</div>
+</div>
+<iframe class="slide-frame" src="./언어에서_행동으로_VLA의_진화.pdf#view=FitH" title="언어에서 행동으로: VLA의 진화 슬라이드 PDF" loading="lazy"></iframe>
+</section>
 <figure class="paper-fig" id="survey-map">
 <svg viewBox="0 0 880 430" role="img" aria-label="2022년부터 2026년까지 VLA와 로봇 정책의 진화 계보도">
  <defs>
