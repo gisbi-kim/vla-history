@@ -43,7 +43,7 @@ article{min-width:0;font-size:16px}article>p:first-child{font-size:18px;color:va
 @media(max-width:760px){.slide-frame{height:360px}}
 .demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0 30px}
 .demo-card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px}
-.demo-card video,.demo-card iframe{width:100%;aspect-ratio:16/9;border-radius:6px;background:#000;display:block;border:0;object-fit:cover}
+.demo-card video,.demo-card iframe,.demo-card img{width:100%;aspect-ratio:16/9;border-radius:6px;background:#000;display:block;border:0;object-fit:cover}
 .demo-cap{margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .demo-cap strong{color:var(--ink);display:block;margin-bottom:2px}
 .paper-fig svg{width:100%;height:auto;display:block}
@@ -4122,8 +4122,8 @@ z
 </figure>
 <div class="demo-grid">
 <div class="demo-card">
-<video controls muted loop playsinline preload="metadata" src="https://storage.googleapis.com/gweb-uniblog-publish-prod/original_videos/rapid-generate-1x-speed_resized.mp4"></video>
-<div class="demo-cap"><strong>Gemini Decision 1 공식 데모 (Google Decisions API, 2026.11)</strong>자유 텍스트 생성 대신 고정 선택지들의 보정된 확률을 실시간으로 채점해 고속 분기·판정을 수행하는 모습 (<a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/" target="_blank" rel="noopener noreferrer">공식 발표 보기 ↗</a>).</div>
+<img src="./gemini-decision-1.jpg" alt="Gemini Decision 1: 주방 커피 쏟음 감지(0.95), 심각도(1.19/2), 다음 행동 선택(wipe_with_cloth 98%)" loading="lazy">
+<div class="demo-cap"><strong>Gemini Decision 1 시각 의사결정 예시 (Google Decisions API, 2026.11)</strong>주방 카운터 장면을 보고 자유 텍스트 대신 구조화된 판정(<code>has_spill: 0.95</code>), 연속 점수(<code>severity: 1.19/2</code>), 다음 행동 선택지(<code>wipe_with_cloth: 98%</code>)만 보정된 확률로 출력하는 모습 (<a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/" target="_blank" rel="noopener noreferrer">공식 발표 보기 ↗</a>).</div>
 </div>
 </div>
 <p>로봇 지능의 계보에서 보면, <a href="#g-decision-model" class="term-ref" data-term="의사결정 전용 모델" data-def="자유 텍스트를 길게 생성하지 않고, 멀티모달 입력에 대해 미리 정한 후보 선택지들의 보정된 확률(calibrated probability)만 빠르게 채점하는 모델(예: Gemini Decision 1, d1.2, Jev).">Decision Model</a>은 2022년 <code>SayCan</code>의 직계 후손이자 Track 1의 초고속 분화다. <code>SayCan</code>이 후보 스킬마다 성공 가능성 점수를 매겼듯, <a href="#g-decision-model" class="term-ref" data-term="의사결정 전용 모델" data-def="자유 텍스트를 길게 생성하지 않고, 멀티모달 입력에 대해 미리 정한 후보 선택지들의 보정된 확률(calibrated probability)만 빠르게 채점하는 모델(예: Gemini Decision 1, d1.2, Jev).">Decision Model</a>은 <code>System 2</code> 계층에 들어가 <code>Astra</code>의 18초짜리 병목을 밀리초~수백 밀리초 단위로 압축하며 세 가지 핵심 역할을 맡는다.</p>
@@ -4624,81 +4624,13 @@ renderClock();
  window.addEventListener('scroll',()=>{if(activeBtn&&pop.style.display==='block')positionPop(activeBtn)},{passive:true});
 })();
 (function(){
- const EN_MAP={
-  '#slides':'Slide Deck (PDF)',
-  '#s00':'0. Map of Four Tracks',
-  '#s01':'1. Gap Between Language & Motors',
-  '#s02':'2. SayPlan: LLM as Conductor',
-  '#s03':'3. RT-1: Breaking Skills into Numbers',
-  '#s04':'4. RT-2: Web Knowledge to Fingertips',
-  '#s05':'5. OXE, Octo, OpenVLA: Open Era',
-  '#s06':'6. ACT & Diffusion Policy',
-  '#s07':'7. Three Clocks: Physics · Policy · Gen',
-  '#s08':'8. System 2+1 & Lightweights',
-  '#s09':'9. FAST: Rewriting Action Alphabet',
-  '#s10':'10. π0: Flow Matching Trajectories',
-  '#s11':'11. π0.5: Into Unseen Homes',
-  '#s12':'12. π*0.6 & RECAP: Learning from Failure',
-  '#s13':'13. π0.7: Context from Noise',
-  '#s14':'14. Astra: Three Roles of General VLM',
-  '#s15':'15. Behind the Success Rates',
-  '#s16':'16. Decision Model: Scoring Choices',
-  '#s17':'17. Fair Experimental Design',
-  '#s18':'18. Design Map at a Glance',
-  '#s19':'19. Spiral Return: Four Tracks Converge',
-  '#timeline':'Appendix A. Full Timeline',
-  '#references':'Appendix B. Primary Sources (S01–S33)',
-  '#glossary':'Appendix C. Technical Glossary',
-  '#backbones':'Appendix D. Backbone & Scale Table'
- };
- const tocKo={};
- document.querySelectorAll('.toc-inner a').forEach(a=>{tocKo[a.getAttribute('href')]=a.textContent});
- const h2Ko={};
- document.querySelectorAll('article h2[id]').forEach(h=>{h2Ko['#'+h.id]=h.textContent});
- const banner=document.createElement('blockquote');
- banner.id='en-notice';
- banner.style.display='none';
- banner.innerHTML='<strong>English Mode</strong> — The <b>Slide Deck (PDF)</b>, navigation, chapter headings, and interactive lab labels are switched to English. The full long-form essay body below is written in Korean.';
- const art=document.querySelector('article');
- if(art)art.prepend(banner);
-
- function applyLang(lang){
-  const isEn=lang==='en';
-  document.documentElement.lang=isEn?'en':'ko';
-  document.title=isEn?'From Language to Action · History of Robot Intelligence & VLA':'언어에서 행동으로 · 로봇 지능과 VLA의 역사';
-  const btn=$('lang-toggle');
-  if(btn)btn.textContent=isEn?'KO':'EN';
-  document.querySelectorAll('[data-ko][data-en]').forEach(el=>{
-   const val=isEn?el.dataset.en:el.dataset.ko;
-   if(el.tagName==='H1')el.innerHTML=val;
-   else el.textContent=val;
-  });
-  document.querySelectorAll('.toc-inner a').forEach(a=>{
-   const h=a.getAttribute('href');
-   if(isEn&&EN_MAP[h])a.textContent=EN_MAP[h];
-   else if(!isEn&&tocKo[h])a.textContent=tocKo[h];
-  });
-  document.querySelectorAll('article h2[id]').forEach(h=>{
-   const key='#'+h.id;
-   if(isEn&&EN_MAP[key])h.textContent=EN_MAP[key];
-   else if(!isEn&&h2Ko[key])h.textContent=h2Ko[key];
-  });
-  const pdfFile=isEn?'From_Language_to_Action_VLA_Evolution_EN.pdf':'언어에서_행동으로_VLA의_진화.pdf';
-  const pdfHref='./'+pdfFile;
-  if($('slide-open'))$('slide-open').href=pdfHref;
-  if($('slide-dl')){$('slide-dl').href=pdfHref;$('slide-dl').setAttribute('download',pdfFile);}
-  if($('slide-frame'))$('slide-frame').src=pdfHref+'#view=FitH';
-  banner.style.display=isEn?'block':'none';
-  try{localStorage.setItem('vla-lang',lang)}catch{}
- }
-
  const btn=$('lang-toggle');
  if(btn){
   btn.addEventListener('click',()=>{
-   const cur=document.documentElement.lang==='en'?'en':'ko';
-   applyLang(cur==='en'?'ko':'en');
+   try{localStorage.setItem('vla-lang','en')}catch{}
+   location.href='./en.html'+location.hash;
   });
  }
- try{if(localStorage.getItem('vla-lang')==='en')applyLang('en')}catch{}
+ try{if(localStorage.getItem('vla-lang')==='en')location.replace('./en.html'+location.hash)}catch{}
 })();
 </script></body></html>
