@@ -3981,6 +3981,18 @@ z
 <td>Whether the task is complete</td>
 </tr>
 </tbody></table></div>
+<h3 id="astra-demos">Can Astra replace a dedicated VLA?</h3>
+<p>In the September 2026 RoboDojo-Sim comparison, GPT-6 Astra generated motion targets directly without a learned robot policy and ranked above all 40 public policy entries. Its average success rate was 22.48%, compared with 19.34% for DM0.5. On precision tasks, Astra achieved 4.00% and DM0.5 achieved 16.75%. (<a href="https://arxiv.org/html/2609.24170v1#S4.T1">RoboDojo paper, Table 1</a>.)</p>
+<div class="demo-grid">
+<div class="demo-card">
+<a href="https://x.com/cdngdev/status/2097339677128982873"><img loading="lazy" src="https://pbs.twimg.com/amplify_video_thumb/2097210560727437312/img/GYHkMobXeJU1Ahb-.jpg" alt="Video preview of a physical SO-101 robot arm painting the Golden Gate Bridge"></a>
+<div class="demo-cap"><strong>Real robot · Painting the Golden Gate Bridge</strong>Thijs Simonian connected Astra to an SO-101 arm with a brush and camera and asked it to paint the bridge. <a href="https://x.com/cdngdev/status/2097339677128982873">Watch the demo on X</a></div>
+</div>
+<div class="demo-card">
+<video controls muted playsinline preload="none" src="https://research.nvidia.com/labs/srl/projects/astranomy/article/videos/YogurtInBowl/prompt-gripper-wrist.mp4" poster="https://research.nvidia.com/labs/srl/projects/astranomy/article/assets/images/prompt-gripper-wrist.jpg" aria-label="Simulated rollout of Astra picking up a yogurt container and placing it in a bowl"></video>
+<div class="demo-cap"><strong>Astranomy · Picking up a yogurt container</strong>In this successful rollout, Astra receives gripper geometry and outputs end-effector targets. The footage is from the wrist camera. <a href="https://research.nvidia.com/labs/srl/projects/astranomy/#prompt-progression">NVIDIA’s original demo</a></div>
+</div>
+</div>
 <h3 id="sub-0">The Trap of No-CoT and Control Latency</h3>
 <p>In OpenAI's system card, an observation appeared that even under a <code>reasoning=None</code> condition it accomplishes quite a bit, sparking <a href="#src-19">S19</a> hasty interpretations that “now <a class="term-ref" data-def="A large multimodal model that jointly understands images and text and generates natural language tokens." data-term="Vision-Language Model" href="#g-vlm">VLM</a>can do high-speed control without thinking.” However, not only are those settings undisclosed, but Astranomy’s subsequent strong results were also obtained with <code>medium reasoning</code>enabled in <a class="term-ref" data-def="The system's current condition, encompassing internal robot joint and gripper readings (proprioception) as well as the physical layout of the environment." data-term="State" href="#g-state">state</a>. <a href="#src-21">S21</a> <a class="term-ref" data-def="The runtime process of feeding live inputs (camera images, instructions) into a trained model with frozen weights to compute actions or answers." data-term="Inference" href="#g-inference">inference</a>traces being omittable is an entirely different matter from a robot reliably moving at real-time high frequency.</p>
 <h2 id="s15">15. Clearing the Mirage: Conditions Behind the Success Rates</h2>
